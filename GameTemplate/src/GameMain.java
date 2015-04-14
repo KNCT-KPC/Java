@@ -32,11 +32,13 @@ public class GameMain extends Canvas {
 		Timer t = new Timer();
 		t.schedule(new GameTask(), 10, 16);
 	}
-	
+
 	class GameTask extends TimerTask{
 		public void Update(){
 			
 		}
+		
+		int rotate = 0;
 		public void Draw(){
 			DrawLibrary dLib = DrawLibrary.getInstance();
 			FontMgr fMgr = FontMgr.getInstance();
@@ -47,6 +49,7 @@ public class GameMain extends Canvas {
 			dLib.drawString(100, 5, "Y:"+m.getY(), new Color(255,255,255), fMgr.getFont("SYSTEM"), true);
 			dLib.drawString(10,  30, "L:"+m.getLeftCount(), new Color(255,255,255), fMgr.getFont("SYSTEM"), true);
 			dLib.drawString(100, 30, "R:"+m.getRightCount(), new Color(255,255,255), fMgr.getFont("SYSTEM"), true);
+			dLib.drawImageRotate(200, 200, ImageMgr.getInstance().getImage("TEST"), (float)((++rotate)/360.0*Math.PI), true);
 		}
 		
 		public void run(){

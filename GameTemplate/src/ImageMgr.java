@@ -18,6 +18,7 @@ public class ImageMgr {
 	//=========================//
 	private final ImageData[] imgDataAry = new ImageData[]{
 		//new ImageData(ƒpƒX, “o˜^–¼),
+		new ImageData("img/wind.png", "TEST")
 	};		
 	
 	//==========================//

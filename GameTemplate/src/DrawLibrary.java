@@ -163,7 +163,7 @@ public class DrawLibrary{
 	* @param angle ‰ñ“]ƒ‰ƒWƒAƒ“Šp
 	**/
 	public void drawImageRotate(int x, int y, Image img, float angle, boolean inter){
-		if(inter) g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		if(inter) g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
 		g2d.rotate(angle, x, y);	//À•W‚ğ‰ñ“]
 		g2d.drawImage(img, x-img.getWidth(gm)/2, y-img.getHeight(gm)/2, gm);	//‰æ‘œ‚ğ•`‰æ
