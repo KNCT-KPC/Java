@@ -1,5 +1,3 @@
-
-
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
@@ -10,17 +8,17 @@ import java.awt.image.BufferStrategy;
 public class DrawLibrary{
 	//シングルトンで記述
 	private static DrawLibrary instance = null;	//インスタンス
-	private DrawLibrary(GameTemplate jf){
-		this.jf = jf;
+	private DrawLibrary(GameMain jf){
+		this.gm = jf;
 	}
 	public static DrawLibrary getInstance(){
 		return instance;
 	}
-	public static void initialize(GameTemplate jf){
+	public static void initialize(GameMain jf){
 		instance = new DrawLibrary(jf);
 	}
 	
-	private GameTemplate jf;	//ビュー_
+	private GameMain gm;	//ビュー_
 	private Graphics2D g2d;	//Graphics2Dオブジェクト
 	
 	public boolean startDraw(BufferStrategy bstrategy){
@@ -29,8 +27,7 @@ public class DrawLibrary{
 		}
 		this.g2d = (Graphics2D)bstrategy.getDrawGraphics();
 		g2d.setColor(Color.DARK_GRAY);
-		g2d.translate(jf.INSETS_RIGHT, jf.INSETS_TOP);		
-		g2d.fillRect(0, 0, GameTemplate.SIZE_X, GameTemplate.SIZE_Y);
+		g2d.fillRect(0, 0, GameMain.SCREEN_WIDTH, GameMain.SCREEN_HEIGHT);
 		return true;
 	}
 	public void endDraw(BufferStrategy bstrategy){
@@ -55,7 +52,7 @@ public class DrawLibrary{
 	* @param y 描画y位置
 	**/
 	public void drawImage(int x, int y, Image img){
-		g2d.drawImage(img, x, y, jf);
+		g2d.drawImage(img, x, y, gm);
 	}
 	/**
 	* アルファブレンドで画像を描画 
@@ -66,7 +63,7 @@ public class DrawLibrary{
 	**/
 	public void drawImageAlphaBlend(int x, int y, Image img, float param){
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, param));	//アルファチャンネルの値をセット
-		g2d.drawImage(img, x, y, jf);		//画像を描画
+		g2d.drawImage(img, x, y, gm);		//画像を描画
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));		//アルファチャンネルの値をリセット
 	}
 
@@ -169,7 +166,7 @@ public class DrawLibrary{
 		if(inter) g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
 		g2d.rotate(angle, x, y);	//座標を回転
-		g2d.drawImage(img, x-img.getWidth(jf)/2, y-img.getHeight(jf)/2, jf);	//画像を描画
+		g2d.drawImage(img, x-img.getWidth(gm)/2, y-img.getHeight(gm)/2, gm);	//画像を描画
 		g2d.setTransform(new AffineTransform());
 		
 		if(inter) g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
@@ -184,12 +181,12 @@ public class DrawLibrary{
 	* @param inter 補間を行うかどうか
 	**/
 	public void drawImageExtend(int x, int y, Image img, float rate, boolean inter){
-		int ex_w = (int)(img.getWidth(jf)*rate);
-		int ex_h = (int)(img.getHeight(jf)*rate);
+		int ex_w = (int)(img.getWidth(gm)*rate);
+		int ex_h = (int)(img.getHeight(gm)*rate);
 		
 		if(inter) g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			//バイリニア補間で描画
-		g2d.drawImage(img, x-ex_w/2, y-ex_h/2, ex_w, ex_h, jf);	//画像を拡大描画
+		g2d.drawImage(img, x-ex_w/2, y-ex_h/2, ex_w, ex_h, gm);	//画像を拡大描画
 		if(inter) g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 			//ニアレスト補間に戻す
 		
@@ -205,13 +202,13 @@ public class DrawLibrary{
 	* @param inter 補間を行うかどうか
 	**/
 	public void drawImageRotateExtend(int x, int y, Image img, float angle, float rate, boolean inter){
-		int ex_w = (int)(img.getWidth(jf)*rate);
-		int ex_h = (int)(img.getHeight(jf)*rate);
+		int ex_w = (int)(img.getWidth(gm)*rate);
+		int ex_h = (int)(img.getHeight(gm)*rate);
 		
 		if(inter) g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			//バイリニア補間で描画
 		g2d.rotate(angle, x, y);	//座標を回転
-		g2d.drawImage(img, x-ex_w/2, y-ex_h/2, ex_w, ex_h, jf);	//画像を拡大描画
+		g2d.drawImage(img, x-ex_w/2, y-ex_h/2, ex_w, ex_h, gm);	//画像を拡大描画
 		g2d.setTransform(new AffineTransform());
 
 		if(inter) g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
@@ -221,13 +218,13 @@ public class DrawLibrary{
 	public void drawImageRotateExtend(int x, int y, Image img, float angle, float rate, boolean inter, float alpha){
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));	//アルファチャンネルの値をセット
 
-		int ex_w = (int)(img.getWidth(jf)*rate);
-		int ex_h = (int)(img.getHeight(jf)*rate);
+		int ex_w = (int)(img.getWidth(gm)*rate);
+		int ex_h = (int)(img.getHeight(gm)*rate);
 		
 		if(inter) g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			//バイリニア補間で描画
 		g2d.rotate(angle, x, y);	//座標を回転
-		g2d.drawImage(img, x-ex_w/2, y-ex_h/2, ex_w, ex_h, jf);	//画像を拡大描画
+		g2d.drawImage(img, x-ex_w/2, y-ex_h/2, ex_w, ex_h, gm);	//画像を拡大描画
 		g2d.setTransform(new AffineTransform());
 
 		if(inter) g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);

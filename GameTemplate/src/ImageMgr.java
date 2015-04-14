@@ -41,7 +41,7 @@ public class ImageMgr {
 	private static ImageMgr instance = null;	//自身のインスタンス(null初期化
 
 	//内部コンストラクタ
-	private ImageMgr(JFrame jap){
+	private ImageMgr(GameMain jap){
 		this.jap = jap;
 		
 		MediaTracker tracker = new MediaTracker(jap);	//メディアトラッカー
@@ -61,7 +61,7 @@ public class ImageMgr {
 	}
 	
 	//インスタンス作成メソッド
-	public static void loadImage(JFrame jap){
+	public static void loadImage(GameMain jap){
 		if(instance == null){
 			instance = new ImageMgr(jap);
 		}
@@ -76,7 +76,7 @@ public class ImageMgr {
 	//==========================//
 	//　　　フィールド定義　　　//
 	//==========================//
-	private JFrame jap;
+	private GameMain jap;
 	private HashMap<String, Image> imgMap = new HashMap<String, Image>();
 	
 	//============================//

@@ -9,20 +9,18 @@ public class Mouse implements MouseListener, MouseMotionListener{
 	//　　　シングルトンパターン記述　　　//
 	//====================================//
 	private static Mouse instance = null;
-	private Mouse(int right, int top){
+	private Mouse(){
 		//各変数の初期化
-		set_point = new Point(0,0);
-		update_point = new Point(0,0);
-		left_press = false;
-		right_press = false;
-		left_count = 0;
-		right_count = 0;
+		setPoint = new Point(0,0);
+		updatePoint = new Point(0,0);
+		leftPress = false;
+		rightPress = false;
+		leftCount = 0;
+		rightCount = 0;
 		moved = false;
-		this.right = right;
-		this.top = top;
 	}	
-	public static void initialize(int right, int top){
-		instance = new Mouse(right, top);
+	public static void initialize(){
+		instance = new Mouse();
 	}
 	public static Mouse getInstance(){
 		return instance;
@@ -31,15 +29,13 @@ public class Mouse implements MouseListener, MouseMotionListener{
 	//==========================//
 	//　　　フィールド定義　　　//
 	//==========================//
-	private Point set_point;		//マウスリスナーから与えられた座標
-	private Point update_point;		//タイマー呼び出し時に更新した座標
-	private boolean left_press;			//タイマー呼び出しまでに左クリックされたかどうか
-	private boolean right_press;		//タイマー呼び出しまでに右クリックされたかどうか
+	private Point setPoint;		//マウスリスナーから与えられた座標
+	private Point updatePoint;		//タイマー呼び出し時に更新した座標
+	private boolean leftPress;			//タイマー呼び出しまでに左クリックされたかどうか
+	private boolean rightPress;		//タイマー呼び出しまでに右クリックされたかどうか
 	private boolean moved;				//タイマー呼び出しまでにマウスが動いたかどうか
-	private int left_count;				//左が押されているフレーム数
-	private int right_count;			//右が押されているフレーム数
-	private int right;
-	private int top;
+	private int leftCount;				//左が押されているフレーム数
+	private int rightCount;			//右が押されているフレーム数
 	
 	//============================//
 	//　　　外部メソッド定義　　　//
@@ -48,57 +44,60 @@ public class Mouse implements MouseListener, MouseMotionListener{
 	* タイマーに呼び出される更新メソッド
 	**/
 	public void update(){
-		if(left_press == true) left_count++;	//そのフレームで押されていたら、カウントを進める
-		else left_count = 0;				//押されていないなら、カウントをリセット
+		if(leftPress == true) leftCount++;	//そのフレームで押されていたら、カウントを進める
+		else leftCount = 0;				//押されていないなら、カウントをリセット
 		
-		if(right_press == true) right_count++;
-		else right_count = 0;
-		
-		update_point.x = set_point.x - right;
-		update_point.y = set_point.y - top;
+		if(rightPress == true) rightCount++;
+		else rightCount = 0;
+
+		updatePoint = setPoint;
+		if(updatePoint.x > GameMain.SCREEN_WIDTH) updatePoint.x = GameMain.SCREEN_WIDTH-1;
+		if(updatePoint.y > GameMain.SCREEN_HEIGHT) updatePoint.y = GameMain.SCREEN_HEIGHT-1;
+		if(updatePoint.x < 0) updatePoint.x = 0;
+		if(updatePoint.y < 0) updatePoint.y = 0;
 	}
 	
 	/**
 	 * マウスの左ボタンが押されているかどうかを判定するメソッド
 	 **/
 	public boolean judgeLeftPress(){
-		return left_count > 0;
+		return leftCount > 0;
 	}
 	/**
 	 * マウスの右ボタンが押されているかどうかを判定するメソッド
 	 */
 	public boolean judgeRightPress(){
-		return right_count > 0;
+		return rightCount > 0;
 	}
 	/**
 	*マウスの左ボタンが押入されているフレーム数を返す
 	**/
 	public int getLeftCount(){
-		return left_count;
+		return leftCount;
 	}
 	/**
 	*マウスの右ボタンが押入されているフレーム数を返す
 	**/
 	public int getRightCount(){
-		return right_count;
+		return rightCount;
 	}
 	/**
 	*マウスの現在xを返す
 	**/
 	public int getX(){
-		return update_point.x;
+		return updatePoint.x;
 	}
 	/**
 	*マウスの現在yを返す
 	**/
 	public int getY(){
-		return update_point.y;
+		return updatePoint.y;
 	}
 	/**
 	*マウスの現在位置を返す
 	**/
 	public Point getPoint(){
-		return update_point;
+		return updatePoint;
 	}	
 	/**
 	 * マウスが動いたかどうかを判定するメソッド
@@ -118,17 +117,17 @@ public class Mouse implements MouseListener, MouseMotionListener{
 	//=============================//	
 	//マウスのボタンが押されたとき
 	public void mousePressed(MouseEvent e){
-		if(e.getButton() == MouseEvent.BUTTON1) left_press = true;
-		if(e.getButton() == MouseEvent.BUTTON3) right_press = true;
+		if(e.getButton() == MouseEvent.BUTTON1) leftPress = true;
+		if(e.getButton() == MouseEvent.BUTTON3) rightPress = true;
 	}	
 	//マウスのボタンが離されたとき
 	public void mouseReleased(MouseEvent e){
-		left_press = false;
-		right_press = false;
+		leftPress = false;
+		rightPress = false;
 	}
 	//マウスが動いたとき
 	public void mouseMoved(MouseEvent e){
-		set_point = e.getPoint();	//仮に値をセット（更新はタイマー呼び出し時）
+		setPoint = e.getPoint();	//仮に値をセット（更新はタイマー呼び出し時）
 		moved = true;
 	}
 	public void mouseClicked(MouseEvent e){}  // マウスボタンが短時間で押して離されたとき
