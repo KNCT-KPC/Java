@@ -29,7 +29,8 @@ public class GameTemplate extends JFrame {
 		
 		Insets insets = this.getInsets(); //利用可能領域の計算に使う
 		this.setSize(SIZE_X+insets.right+insets.left,SIZE_Y+insets.top+insets.bottom);
-		INSETS_RIGHT = insets.right;
+		this.setLocationRelativeTo(null);
+		INSETS_RIGHT = insets.left;
 		INSETS_TOP = insets.top;
 		
 		this.setIgnoreRepaint(true);
@@ -37,7 +38,7 @@ public class GameTemplate extends JFrame {
 		bstrategy = this.getBufferStrategy();
 		
 		DrawLibrary.initialize(this);
-		Mouse.initialize(INSETS_RIGHT, INSETS_TOP);		
+		Mouse.initialize(INSETS_RIGHT, INSETS_TOP);
 		addMouseListener(Mouse.getInstance());
 		addMouseMotionListener(Mouse.getInstance());			
 		
